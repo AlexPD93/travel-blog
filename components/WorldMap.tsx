@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef /*useState*/ } from 'react';
 import * as d3 from 'd3';
 import { Feature, FeatureCollection } from 'geojson';
 
@@ -14,7 +14,7 @@ type CountryFeature = Feature<GeoJSON.Geometry, CountryProperties>;
 
 const WorldMap: React.FC = () => {
     const svgRef = useRef<SVGSVGElement | null>(null);
-    const [countryName, setCountryName] = useState<string>('');
+    // const [countryName, setCountryName] = useState<string>('');
 
     useEffect(() => {
         const width = 1000;
@@ -83,10 +83,10 @@ const WorldMap: React.FC = () => {
                                         : '#ffffff'
                                 ); // Restore original color on mouse out
                             }
-                        )
-                        .on('click', (event: MouseEvent, d: CountryFeature) => {
-                            setCountryName(d.properties.NAME_EN);
-                        });
+                        );
+                    // .on('click', (event: MouseEvent, d: CountryFeature) => {
+                    // setCountryName(d.properties.NAME_EN);
+                    // });
                 }
             )
             .catch((error) => console.error('Error loading GeoJSON:', error));
