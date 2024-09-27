@@ -22,8 +22,8 @@ const WorldMap: React.FC = () => {
 
         const svg = d3
             .select(svgRef.current)
-            .attr('width', width)
-            .attr('height', height);
+            .attr('viewBox', `0 0 1000 600`) // Define the viewBox for scaling
+            .attr('preserveAspectRatio', 'xMidYMid meet');
 
         const projection = d3
             .geoMercator()
@@ -51,11 +51,39 @@ const WorldMap: React.FC = () => {
                         .attr('d', path)
                         .style('fill', (d: CountryFeature) =>
                             Countries.includes(d.properties.NAME_EN)
-                                ? '#ff9999'
+                                ? '#3CB371'
                                 : '#ffffff'
                         )
                         .style('stroke', '#000000')
-                        .style('cursor', 'pointer')
+                        .on(
+                            'mouseover',
+                            (event: MouseEvent, d: CountryFeature) => {
+                                const target =
+                                    event.currentTarget as SVGPathElement;
+
+                                if (Countries.includes(d.properties.NAME_EN)) {
+                                    d3.select(target)
+                                        .style('cursor', 'pointer')
+                                        .style('fill', '#228B22');
+                                } else {
+                                    d3.select(target)
+                                        .style('cursor', 'default')
+                                        .style('fill', '#ffffff');
+                                }
+                            }
+                        )
+                        .on(
+                            'mouseout',
+                            (event: MouseEvent, d: CountryFeature) => {
+                                const target =
+                                    event.currentTarget as SVGPathElement; // Assert the type here
+                                d3.select(target).style('fill', () =>
+                                    Countries.includes(d.properties.NAME_EN)
+                                        ? '#3CB371'
+                                        : '#ffffff'
+                                ); // Restore original color on mouse out
+                            }
+                        )
                         .on('click', (event: MouseEvent, d: CountryFeature) => {
                             setCountryName(d.properties.NAME_EN);
                         });
@@ -65,7 +93,9 @@ const WorldMap: React.FC = () => {
     }, []);
     return (
         <>
-            <svg ref={svgRef}></svg>
+            <div className='flex justify-center items-center w-full h-[500px] md:h-[700px] lg:h-[900px]'>
+                <svg ref={svgRef} className='w-full h-full'></svg>
+            </div>
         </>
     );
 };
