@@ -1,3 +1,3 @@
 export default function Destinations() {
-  return <h1>Destinations</h1>;
+    return <h1>Destinations</h1>;
 }
