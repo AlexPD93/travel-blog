@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { Feature, FeatureCollection } from 'geojson';
 
+import Countries from '../public/CountriesVisited';
+
 interface CountryProperties {
     NAME_EN: string;
     ISO_A3: string;
@@ -47,7 +49,11 @@ const WorldMap: React.FC = () => {
                         .append('path')
                         .attr('class', 'country')
                         .attr('d', path)
-                        .style('fill', '#ffffff')
+                        .style('fill', (d: CountryFeature) =>
+                            Countries.includes(d.properties.NAME_EN)
+                                ? '#ff9999'
+                                : '#ffffff'
+                        )
                         .style('stroke', '#000000')
                         .style('cursor', 'pointer')
                         .on('click', (event: MouseEvent, d: CountryFeature) => {
@@ -59,7 +65,6 @@ const WorldMap: React.FC = () => {
     }, []);
     return (
         <>
-            <h1>{countryName}</h1>
             <svg ref={svgRef}></svg>
         </>
     );
