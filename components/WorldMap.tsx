@@ -22,7 +22,7 @@ const WorldMap: React.FC = () => {
 
     const svg = d3
       .select(svgRef.current)
-      .attr("viewBox", `0 0 1000 600`) // Define the viewBox for scaling
+      .attr("viewBox", "0 0 1000 600") // Define the viewBox for scaling
       .attr("preserveAspectRatio", "xMidYMid meet");
 
     const projection = d3
@@ -33,7 +33,7 @@ const WorldMap: React.FC = () => {
     const path = d3.geoPath().projection(projection);
 
     fetch(
-      "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson"
+      "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_admin_0_countries.geojson",
     )
       .then((response) => response.json())
       .then(
@@ -46,7 +46,7 @@ const WorldMap: React.FC = () => {
             .attr("class", "country")
             .attr("d", path)
             .style("fill", (d: CountryFeature) =>
-              Countries.includes(d.properties.NAME_EN) ? "#3CB371" : "#ffffff"
+              Countries.includes(d.properties.NAME_EN) ? "#3CB371" : "#ffffff",
             )
             .style("stroke", "#000000")
             .on("mouseover", (event: MouseEvent, d: CountryFeature) => {
@@ -65,13 +65,15 @@ const WorldMap: React.FC = () => {
             .on("mouseout", (event: MouseEvent, d: CountryFeature) => {
               const target = event.currentTarget as SVGPathElement; // Assert the type here
               d3.select(target).style("fill", () =>
-                Countries.includes(d.properties.NAME_EN) ? "#3CB371" : "#ffffff"
+                Countries.includes(d.properties.NAME_EN)
+                  ? "#3CB371"
+                  : "#ffffff",
               ); // Restore original color on mouse out
             });
           // .on('click', (event: MouseEvent, d: CountryFeature) => {
           // setCountryName(d.properties.NAME_EN);
           // });
-        }
+        },
       )
       .catch((error) => console.error("Error loading GeoJSON:", error));
   }, []);
