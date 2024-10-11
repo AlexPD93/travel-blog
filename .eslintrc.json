@@ -1,22 +1,9 @@
 {
   "extends": [
     "next/core-web-vitals",
-    "next/typescript",
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:prettier/recommended"
-  ],
-  "plugins": [
-    "react"  
+    "next/typescript"
   ],
   "rules": {
-    "quotes": ["error", "double"],
-    "react/jsx-quotes": ["error", "prefer-double"],
-    "react/react-in-jsx-scope": "off"
-  },
-  "settings": {
-    "react": {
-      "version": "detect"  
-    }
+    "quotes": ["error", "double"]
   }
 }
