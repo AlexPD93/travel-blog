@@ -61,10 +61,10 @@ jobs:
       - name: Build Next.js app
         run: npm run build
 
-      # # 5. Deploy to AWS Amplify
-      # - name: Deploy to Amplify
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     AWS_REGION: 'us-east-1'  # Update with your AWS region
-      #   run: amplify publish --yes
+      # 5. Deploy to AWS Amplify
+      - name: Deploy to Amplify
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "us-east-1" # Update with your AWS region
+        run: amplify publish --yes
