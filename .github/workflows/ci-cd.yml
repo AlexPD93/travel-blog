@@ -11,29 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout Code
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # 2. Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "20" # Match the Node version your app requires
+          node-version: "20"
 
-      # 3. Install Dependencies
       - name: Install dependencies
         run: npm install
 
-      # # 4. Run Tests
-      # - name: Run tests
-      #   run: npm test
-
-      # # 5. Lint and Format Code
-      # - name: Run ESLint
-      #   run: npm run lint
-
-      # 6. Build the Application
       - name: Build Next.js app
         run: npm run build
 
@@ -43,45 +31,47 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      # 1. Checkout Code
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # 2. Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          node-version: "20"
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
 
-      # 3. Install Dependencies
-      - name: Install dependencies
-        run: npm install
-
-      # 4. Build the Application
-      - name: Build Next.js app
-        run: npm run build
-
-      - name: Verify AWS Credentials
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Install AWS CLI and Amplify CLI
         run: |
-          echo "Checking AWS credentials..."
-          aws configure list
+          npm install -g aws-cli @aws-amplify/cli
 
-      # 5. Deploy to AWS Amplify
-      - name: Deploy to Amplify
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: "eu-west-2"
-        run:
-          amplify publish --yes
+      - name: Deploy to AWS Amplify
+        run: |
+          # Replace 'YourAppName' with your actual Amplify app name
+          APP_ID=$(aws amplify list-apps --query "apps[?name=='YourAppName'].appId" --output text)
 
-          # 6. Deploy to S3 (Optional for static assets)
+          if [ -z "$APP_ID" ]; then
+            echo "Amplify app not found. Please create the app in AWS Amplify console first."
+            exit 1
+          fi
+
+          # Create a new branch deployment
+          BRANCH_NAME=$(echo "${GITHUB_REF#refs/heads/}" | sed 's/\//_/g')
+
+          # Deploy the branch
+          DEPLOYMENT_ID=$(aws amplify create-deployment \
+            --app-id $APP_ID \
+            --branch-name $BRANCH_NAME \
+            --query "jobId" \
+            --output text)
+
+          echo "Deployment initiated with ID: $DEPLOYMENT_ID"
+
+          # Wait for deployment to complete
+          aws amplify wait deployment-complete \
+            --app-id $APP_ID \
+            --job-id $DEPLOYMENT_ID
+
       - name: Sync assets to S3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           aws s3 sync ./public s3://alex-perez-davies-blog --region eu-west-2
