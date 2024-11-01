@@ -68,7 +68,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "eu-west-2"
         run:
-          amplify publish --yes
+          npx amplify publish --yes
 
           # 6. Deploy to S3 (Optional for static assets)
       - name: Sync assets to S3
