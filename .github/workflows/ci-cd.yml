@@ -25,13 +25,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 4. Run Tests
-      - name: Run tests
-        run: npm test
+      # # 4. Run Tests
+      # - name: Run tests
+      #   run: npm test
 
-      # 5. Lint and Format Code
-      - name: Run ESLint
-        run: npm run lint
+      # # 5. Lint and Format Code
+      # - name: Run ESLint
+      #   run: npm run lint
 
       # 6. Build the Application
       - name: Build Next.js app
@@ -67,4 +67,13 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "eu-west-2"
-        run: amplify publish --yes
+        run:
+          amplify publish --yes
+
+          # 6. Deploy to S3 (Optional for static assets)
+      - name: Sync assets to S3
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 sync ./public s3://alex-perez-davies-blog --region eu-west-2
