@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-travelblog-dev-6c62d-authRole",
+      "UnauthRoleArn": "arn:aws:iam::741448924215:role/amplify-travelblog-dev-6c62d-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::741448924215:role/amplify-travelblog-dev-6c62d-authRole",
+      "Region": "eu-west-2",
+      "DeploymentBucketName": "amplify-travelblog-dev-6c62d-deployment",
+      "UnauthRoleName": "amplify-travelblog-dev-6c62d-unauthRole",
+      "StackName": "amplify-travelblog-dev-6c62d",
+      "StackId": "arn:aws:cloudformation:eu-west-2:741448924215:stack/amplify-travelblog-dev-6c62d/bd3938a0-9db5-11ef-bdb9-0277ecb138bd",
+      "AmplifyAppId": "denxxfz7j3kmn"
+    },
+    "categories": {
+      "hosting": {
+        "S3AndCloudFront": {}
+      }
+    }
+  }
+}
