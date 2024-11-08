@@ -53,27 +53,11 @@ jobs:
         with:
           node-version: "20"
 
-      # 3. Install Dependencies
-      - name: Install dependencies
-        run: npm install
-
-      # 4. Build the Application
-      - name: Build Next.js app
-        run: npm run build
-
-      # 5. Deploy to AWS Amplify
-      - name: Deploy to Amplify
+      # 3. Sync Build Output to S3
+      - name: Sync Build to S3
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "eu-west-2"
-        run:
-          npx amplify publish --yes
-
-          # 6. Deploy to S3 (Optional for static assets)
-      - name: Sync assets to S3
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          aws s3 sync ./public s3://alex-perez-davies-blog --region eu-west-2
+          aws s3 sync ./build s3://travelblog-20241108095333-hostingbucket-dev --delete
