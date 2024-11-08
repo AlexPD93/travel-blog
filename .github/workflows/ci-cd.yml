@@ -69,3 +69,11 @@ jobs:
           AWS_REGION: "eu-west-2"
         run: |
           aws s3 sync ./build s3://travelblog-20241108095333-hostingbucket-dev --delete
+
+      # 6. Invalidate CloudFront Cache
+      - name: Invalidate CloudFront
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws cloudfront create-invalidation --distribution-id E34W14WGY4LHSB --paths "/*"
