@@ -36,6 +36,7 @@ jobs:
 
       # 6. Build the Application
       - name: Build Next.js app
+        working-directory: ./TravelBlogFrontend
         run: npm run build
 
   deploy:
@@ -61,6 +62,7 @@ jobs:
 
       # 4. Build the Application
       - name: Build Next.js app
+        working-directory: ./TravelBlogFrontend
         run: npm run build
 
       # 5. Sync Build Output to S3
