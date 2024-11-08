@@ -1,0 +1,6 @@
+@TravelBlogBackend_HostAddress = http://localhost:5296
+
+GET {{TravelBlogBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
