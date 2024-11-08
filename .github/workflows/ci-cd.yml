@@ -63,9 +63,9 @@ jobs:
 
       # 5. Sync Build Output to S3
       - name: Sync Build to S3
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: "eu-west-2"
-      run: |
-        aws s3 sync ./build s3://travelblog-20241108095333-hostingbucket-dev --delete
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: "eu-west-2"
+        run: |
+          aws s3 sync ./build s3://travelblog-20241108095333-hostingbucket-dev --delete
